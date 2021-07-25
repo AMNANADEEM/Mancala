@@ -1,14 +1,13 @@
-import time
+
 class Mancala:
     def __init__(self):
         """Initialize game"""
         self.board = [4,4,4,4,4,4,0,4,4,4,4,4,4,0]
-        #test whether the cells are printing in the correct order
-        """
-        self.board = []
-        for i in range(14):
-            self.board.append(i)
-        """
+        # test whether the cells are printing in the correct order:
+        # self.board = []
+        # for i in range(14):
+        #     self.board.append(i)
+        
         self.p1_score = 0
         self.p2_score = 0
         
@@ -50,20 +49,32 @@ class Mancala:
 
         self.establish_winner()
         return rval
-        
-   
+
     def p2validmove(self, chosenCell):
         """"Check if player 2's entered move is valid"""
-        if 7 <= chosenCell <= 12 and self.board[chosenCell] > 0:
-            return True
+        if ord("0") <= ord(chosenCell) <= ord("9"):
+            chosenCell = int(chosenCell)
         else:
-            return False
+            return -1
+        if 1 <= chosenCell <= 6 and self.board[chosenCell+6] > 0:
+            return chosenCell + 6
+        else:
+            return -1
+   
+    # def p2validmove(self, chosenCell):
+    #     """"Check if player 2's entered move is valid"""
+    #     if 7 <= chosenCell <= 12 and self.board[chosenCell] > 0:
+    #         return True
+    #     else:
+    #         return False
 
     def p2play(self):
-        move2 = int(input("Player2 move:\n"))
+        move2 = input("Player2 move:\n")
         #check validity of move
-        while not self.p2validmove(move2):
-            move2 = int(input("Invalid input, Player 2 move:\n"))
+        move2 = self.p2validmove(move2)
+        while move2 == -1:
+            move2 = input("Invalid input, Player 2 move:\n")
+            move2 = self.p2validmove(move2)
         hand, self.board[move2] = self.board[move2], 0
         position = move2 + 1
         while hand != 0: #while hand is not empty
@@ -95,16 +106,23 @@ class Mancala:
 
     def p1validmove(self, chosenCell):
         """"Check if player 1's entered move is valid"""
-        if 0 <= chosenCell <= 5 and self.board[chosenCell] > 0:
-            return True
+        if ord("0") <= ord(chosenCell) <= ord("9"):
+            chosenCell = int(chosenCell)
         else:
-            return False
+            return -1
+        if 1 <= chosenCell <= 6 and self.board[chosenCell-1] > 0:
+            return chosenCell - 1
+        else:
+            return -1
 
     def p1play(self):
-        move1 = int(input("Player1 move:\n"))
+        move1 = input("Player1 move:\n")
         #check validity of move
-        while not self.p1validmove(move1):
-           move1 = int(input("Invalid input, Player 1 move:\n")) 
+        move1 = self.p1validmove(move1)
+        while move1 == -1:
+           move1 = input("Invalid input, Player 1 move:\n")
+           move1 = self.p1validmove(move1)
+
         hand, self.board[move1] = self.board[move1], 0
         position = move1 + 1
         while hand != 0:
@@ -125,24 +143,47 @@ class Mancala:
             return True # p1 plays again if last cell captured
         return False
             
+    def run(self):
+        while not self.game_over():
+            #let p1 play as long as p1.play() returns True
+            while not self.game_over() and self.p1play():
+                if self.game_over(): # this logic is ugly, but works for now
+                    break
+                else:
+                    self.printboard()
+            self.p2_printboard() #show p2 their board before the play
+            while not self.game_over() and self.p2play():
+                if self.game_over():
+                    break
+                else:
+                    self.p2_printboard()
             
+            print("WINNER:", self.winner)
+            
+                 
+
+
+
+
+
+
 
     
-    def run(self):
+    def runOLD(self): #OLD FUNCTION 
         # need to fix game over scenario
         while not self.game_over():
             #start a new round
             # self.round_over = False
             # while not self.round_over:
             #call function to allow p1play
-            while self.p1play() and not self.game_over():
+            while not self.game_over() and self.p1play(): # this logic is incorrect
                 #return True if still playing, return False if p1 move is over
                 #print("play continued")
                 #self.printboard()
                 self.printboard()
             self.establish_winner()
             self.p2_printboard()
-            while self.p2play() and not self.game_over():
+            while not self.game_over() and self.p2play():
                 #print("play continued")
                 self.p2_printboard()
             self.establish_winner()
