@@ -145,6 +145,7 @@ class Mancala:
             
     def run(self):
         while not self.game_over():
+            self.printboard()
             #let p1 play as long as p1.play() returns True
             while not self.game_over() and self.p1play():
                 if self.game_over(): # this logic is ugly, but works for now
@@ -158,7 +159,8 @@ class Mancala:
                 else:
                     self.p2_printboard()
             
-            print("WINNER:", self.winner)
+        self.printboard()    
+        print("WINNER:", self.winner)
             
                  
 
@@ -273,6 +275,6 @@ class Mancala:
 
 game = Mancala()
 #game.p2_printboard()
-game.printboard()
+#game.printboard()
 game.run()
-game.printboard()
+#game.printboard()
