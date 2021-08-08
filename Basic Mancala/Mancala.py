@@ -2,8 +2,9 @@
 class Mancala:
     def __init__(self):
         """Initialize game"""
-        self.board = [4,4,4,4,4,4,0,4,4,4,4,4,4,0]
-        # test whether the cells are printing in the correct order:
+        self.board = [4,4,4,4,4,4,0,4,4,4,4,4,4,0] # 4 pebbles in each cell besides the players'
+
+        # Code to check whether the cells are printing in the correct order:
         # self.board = []
         # for i in range(14):
         #     self.board.append(i)
@@ -11,19 +12,25 @@ class Mancala:
         self.p1_score = 0
         self.p2_score = 0
         
-        self.winner = "TIE"
+        
+        self.winner = "TIE" # Game always starts tied
+        # Player view variables are used to set the colors of their score
         self.p1view = None
         self.p2view = None
-        self.p1name = None
+        # Player name variables are used to set the colors of their names
+        self.p1name = None 
         self.p2name = None
 
     def establish_winner(self):
         """Pick current winner based on status of game"""
-        if self.board[6] == self.board[13]:
+        p1score = self.board[6]
+        p2score = self.board[13]
+
+        if p1score == p2score:
             self.winner = "TIE"
-        elif self.board[6] > self.board[13]:
+        elif p1score > p2score:
             self.winner = "P1"
-        elif self.board[13] > self.board[6]:
+        elif p2score > p1score:
             self.winner = "P2"
 
 
@@ -31,34 +38,39 @@ class Mancala:
         """Determine whether the game is over"""
         rval = False #Return Value (True = Game Over, False = Game Not Over)
         
-        if self.board[6] + self.board[13] == 48:
-
+        
+        if self.board[6] + self.board[13] == 48: # if p1score and p2score sums to 48, game over
             rval = True
-        elif sum(self.board[0:6]) == 0:
+
+        elif sum(self.board[0:6]) == 0: # if p1 has no more possible moves, p2 captures all the pebbles on its own side
             self.board[13] += sum(self.board[7:13])
             for i in range(7,13):
                 self.board[i] = 0
-
             rval = True
-        elif sum(self.board[7:13]) == 0:
+
+        elif sum(self.board[7:13]) == 0: # if p2 has no more possible moves, p1 captures all the pebbles on its own side
             self.board[6] += sum(self.board[0:6])
             for i in range(0,6):
                 self.board[i] = 0
-
             rval = True
 
-        self.establish_winner()
-        return rval
+        self.establish_winner() # Establish current winner
+        return rval # return True if game over, false otherwise
 
-    def p2validmove(self, chosenCell):
-        """"Check if player 2's entered move is valid"""
+    def validmove(self, chosenCell):
+        """Check whether the chosen cell is a single digit number. If it is, return the integer, otherwise return -1"""
         if len(chosenCell) != 1:
             return -1
         if ord("0") <= ord(chosenCell) <= ord("9"):
-            chosenCell = int(chosenCell)
+            if 1 <= chosenCell <= 6:
+                return int(chosenCell)    
         else:
             return -1
-        if 1 <= chosenCell <= 6 and self.board[chosenCell+6] > 0:
+
+    def p2validmove(self, chosenCell):
+        """"Check if player 2's entered move is valid"""
+        chosenCell = self.validmove(chosenCell)
+        if self.board[chosenCell+6] > 0: # check if the chosen cell is empty
             return chosenCell + 6
         else:
             return -1
@@ -95,13 +107,8 @@ class Mancala:
 
     def p1validmove(self, chosenCell):
         """"Check if player 1's entered move is valid"""
-        if len(chosenCell) != 1:
-            return -1
-        if ord("0") <= ord(chosenCell) <= ord("9"):
-            chosenCell = int(chosenCell)
-        else:
-            return -1
-        if 1 <= chosenCell <= 6 and self.board[chosenCell-1] > 0:
+        chosenCell = self.validmove(chosenCell)
+        if self.board[chosenCell-1] > 0: # check if the chosen cell is empty
             return chosenCell - 1
         else:
             return -1
