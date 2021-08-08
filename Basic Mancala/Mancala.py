@@ -62,13 +62,6 @@ class Mancala:
             return chosenCell + 6
         else:
             return -1
-   
-    # def p2validmove(self, chosenCell):
-    #     """"Check if player 2's entered move is valid"""
-    #     if 7 <= chosenCell <= 12 and self.board[chosenCell] > 0:
-    #         return True
-    #     else:
-    #         return False
 
     def p2play(self):
         move2 = input("Player2 move:\n")
@@ -80,12 +73,10 @@ class Mancala:
         hand, self.board[move2] = self.board[move2], 0
         position = move2 + 1
         while hand != 0: #while hand is not empty
-            #time.sleep(1)
             #drop pebbles into every cell except for p1's
             if position == 13:
                 self.board[position] += 1
                 hand -= 1
-                #self.printboard()
                 position = 0
             elif position == 6:
                 position += 1
@@ -94,11 +85,7 @@ class Mancala:
                 hand -= 1
 
                 if hand == 0 and self.board[position] > 1: # doesn't include 0<=position<=12
-                    #print("hand:", hand)
-                    #print("position:", position)
                     hand, self.board[position] = self.board[position], 0
-                    #print("picking up")
-                #self.printboard()
                 position += 1
         # return boolean
         if position == 0:
@@ -130,7 +117,6 @@ class Mancala:
         hand, self.board[move1] = self.board[move1], 0
         position = move1 + 1
         while hand != 0:
-            #time.sleep(1)
             #game is currently not ending properly
             if not position == 13:
                 self.board[position] += 1
@@ -138,8 +124,6 @@ class Mancala:
                 if hand == 0 and self.board[position] > 1 and 0 <= position <= 12 and position != 6:
                     #pick up everything in that cell if there are any other pieces and if it's within p1's range
                     hand, self.board[position] = self.board[position], 0
-                    #print("picking up")
-                #self.printboard()
                 position += 1
             else:
                 position = 0
@@ -174,40 +158,6 @@ class Mancala:
         self.printboard()    
         self.printWinner()
             
-                 
-
-
-
-
-
-
-
-    
-    def runOLD(self): #OLD FUNCTION 
-        # need to fix game over scenario
-        while not self.game_over():
-            #start a new round
-            # self.round_over = False
-            # while not self.round_over:
-            #call function to allow p1play
-            while not self.game_over() and self.p1play(): # this logic is incorrect
-                #return True if still playing, return False if p1 move is over
-                #print("play continued")
-                #self.printboard()
-                self.printboard()
-            self.establish_winner()
-            self.p2_printboard()
-            while not self.game_over() and self.p2play():
-                #print("play continued")
-                self.p2_printboard()
-            self.establish_winner()
-            self.printboard()
-        print("WINNER:", self.winner)
-
-
-
-        
-
     def setcolors(self):
         """Set colors of P1 and P2 to reflect current winner"""
         if self.winner == "TIE":
@@ -280,13 +230,6 @@ class Mancala:
         for i in range(1,7):
             print(f"  {i} ", end="")
         print("     " + self.p2name + "   ")
-
-
-    
-    
-
+ 
 game = Mancala()
-#game.p2_printboard()
-#game.printboard()
 game.run()
-#game.printboard()
