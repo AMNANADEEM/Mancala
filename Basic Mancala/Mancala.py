@@ -52,6 +52,8 @@ class Mancala:
 
     def p2validmove(self, chosenCell):
         """"Check if player 2's entered move is valid"""
+        if len(chosenCell) != 1:
+            return -1
         if ord("0") <= ord(chosenCell) <= ord("9"):
             chosenCell = int(chosenCell)
         else:
@@ -106,6 +108,8 @@ class Mancala:
 
     def p1validmove(self, chosenCell):
         """"Check if player 1's entered move is valid"""
+        if len(chosenCell) != 1:
+            return -1
         if ord("0") <= ord(chosenCell) <= ord("9"):
             chosenCell = int(chosenCell)
         else:
@@ -142,7 +146,15 @@ class Mancala:
         if position == 7:
             return True # p1 plays again if last cell captured
         return False
-            
+
+    def printWinner(self):
+        if self.winner == "TIE":
+            print("********  TIE!  ********")
+        elif self.winner == "P1":
+            print("******** Player 1 WINS! ********")
+        elif self.winner == "P2":
+            print("******** Player 2 WINS! ********")
+    
     def run(self):
         while not self.game_over():
             self.printboard()
@@ -160,7 +172,7 @@ class Mancala:
                     self.p2_printboard()
             
         self.printboard()    
-        print("WINNER:", self.winner)
+        self.printWinner()
             
                  
 
