@@ -11,8 +11,6 @@ class Mancala:
         
         self.p1_score = 0
         self.p2_score = 0
-        
-        
         self.winner = "TIE" # Game always starts tied
         # Player view variables are used to set the colors of their score
         self.p1view = None
@@ -22,7 +20,7 @@ class Mancala:
         self.p2name = None
 
     def establish_winner(self):
-        """Pick current winner based on status of game"""
+        """Set current winner based on status of game"""
         p1score = self.board[6]
         p2score = self.board[13]
 
@@ -106,7 +104,7 @@ class Mancala:
 
 
     def p1validmove(self, chosenCell):
-        """"Check if player 1's entered move is valid"""
+        """Check if player 1's entered move is valid"""
         chosenCell = self.validmove(chosenCell)
         if self.board[chosenCell-1] > 0: # check if the chosen cell is empty
             return chosenCell - 1
@@ -114,6 +112,7 @@ class Mancala:
             return -1
 
     def p1play(self):
+        """Ask for user input until valid and then play p1's selection"""
         move1 = input("Player1 move:\n")
         #check validity of move
         move1 = self.p1validmove(move1)
@@ -139,6 +138,7 @@ class Mancala:
         return False
 
     def printWinner(self):
+        """Prints the winner at the end of the  game"""
         if self.winner == "TIE":
             print("********  TIE!  ********")
         elif self.winner == "P1":
@@ -147,6 +147,7 @@ class Mancala:
             print("******** Player 2 WINS! ********")
     
     def run(self):
+        """Runs gameplay"""
         while not self.game_over():
             self.printboard()
             #let p1 play as long as p1.play() returns True
