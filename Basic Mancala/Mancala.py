@@ -1,4 +1,5 @@
-
+# Game  not running properly
+# 12 is being accepted as a valid input
 class Mancala:
     def __init__(self):
         """Initialize game"""
@@ -60,15 +61,17 @@ class Mancala:
         if len(chosenCell) != 1:
             return -1
         if ord("0") <= ord(chosenCell) <= ord("9"):
-            if 1 <= chosenCell <= 6:
-                return int(chosenCell)    
-        else:
-            return -1
+            if 1 <= int(chosenCell) <= 6:
+                return int(chosenCell)  
+        return -1
 
     def p2validmove(self, chosenCell):
         """"Check if player 2's entered move is valid"""
         chosenCell = self.validmove(chosenCell)
-        if self.board[chosenCell+6] > 0: # check if the chosen cell is empty
+        
+        if chosenCell == -1:
+            return -1
+        elif self.board[chosenCell+6] > 0: # check if the chosen cell is empty
             return chosenCell + 6
         else:
             return -1
@@ -106,8 +109,11 @@ class Mancala:
     def p1validmove(self, chosenCell):
         """Check if player 1's entered move is valid"""
         chosenCell = self.validmove(chosenCell)
-        if self.board[chosenCell-1] > 0: # check if the chosen cell is empty
+        if chosenCell == -1:
+            return -1
+        elif self.board[chosenCell-1] > 0: # check if the chosen cell is empty
             return chosenCell - 1
+
         else:
             return -1
 
@@ -123,6 +129,7 @@ class Mancala:
         hand, self.board[move1] = self.board[move1], 0
         position = move1 + 1
         while hand != 0:
+            #self.printboard()
             #game is currently not ending properly
             if not position == 13:
                 self.board[position] += 1
